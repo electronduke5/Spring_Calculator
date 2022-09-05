@@ -9,13 +9,51 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class MainController {
 
-    @GetMapping("/calc")
+    @GetMapping("/calc2")
     public String getCalc() {
         return "home";
     }
 
     @PostMapping("/calc")
     public String postResult(
+            @RequestParam(
+                    value = "variable",
+                    required = false,
+                    defaultValue = "0") double a,
+            @RequestParam(
+                    value = "variable2",
+                    required = false,
+                    defaultValue = "0") double b,
+            @RequestParam char operation,
+            Model model) {
+
+        double c = 0;
+
+        switch (operation) {
+            case '+':
+                c = a + b;
+                break;
+            case '-':
+                c = a - b;
+                break;
+            case '*':
+                c = a * b;
+                break;
+            case '/':
+                c = a / b;
+                break;
+            default:
+                throw new IllegalStateException("Error =|: " + operation);
+        }
+        model.addAttribute("first", a);
+        model.addAttribute("second", b);
+        model.addAttribute("operation", operation);
+        model.addAttribute("answer", c);
+        return "home";
+    }
+
+    @GetMapping("/calc")
+    public String getResult(
             @RequestParam(
                     value = "variable",
                     required = false,
